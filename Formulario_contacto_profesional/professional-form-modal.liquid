@@ -1,0 +1,228 @@
+<div id="professional-form-modal" class="pfm-overlay" aria-hidden="true" role="dialog">
+  <div class="pfm-dialog" role="document">
+    <div class="pfm-header">
+      <h2>{{ 'profesional.title' | t }}</h2>
+      <button class="pfm-close" type="button" aria-label="Close">✕</button>
+    </div>
+
+    {% form 'contact', id: 'ContactForm-Profesionales' %}
+      {% if form.posted_successfully? %}
+        <p class="pfm-success">{{ 'profesional.success' | t }}</p>
+      {% else %}
+        <p class="pfm-subtitle">{{ 'profesional.subtitle' | t }}</p>
+
+        <select name="contact[pais]" required>
+          <option value="">{{ 'profesional.select_country' | t }}</option>
+          {% for country in localization.available_countries %}
+            <option value="{{ country.name }}">{{ country.name }}</option>
+          {% endfor %}
+        </select>
+
+        <input type="text" name="contact[empresa]" placeholder="{{ 'profesional.empresa' | t }}" required>
+        <input type="text" name="contact[persona]" placeholder="{{ 'profesional.persona' | t }}" required>
+        <input type="tel" name="contact[telefono]" placeholder="{{ 'profesional.telefono' | t }}" required>
+        <input type="text" name="contact[cp]" placeholder="{{ 'profesional.cp' | t }}" required>
+        <input type="email" name="contact[email]" placeholder="{{ 'profesional.email' | t }}" required>
+
+        <textarea name="contact[body]" placeholder="{{ 'profesional.consulta' | t }}"></textarea>
+        <div class="pfm-terms">
+          <label>
+            <input type="checkbox" required>
+            <span>
+              {{ 'profesional.privacidad' | t }}
+              <a href="/policies/privacy-policy" target="_blank">{{ 'profesional.terms' | t }}</a>
+            </span>
+          </label>
+        </div>
+
+        <button type="submit" class="pfm-submit">{{ 'profesional.submit' | t }}</button>
+      {% endif %}
+    {% endform %}
+  </div>
+</div>
+
+<style>
+    .pfm-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+  }
+  .pfm-overlay[aria-hidden="false"] {
+    display: flex;
+  }
+  .pfm-dialog {
+    width: min(820px,95vw);
+    max-height: 90vh;
+    overflow: auto;
+    background: #fff;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    position: relative;
+    font-family: var(--font-body--family, 'Inter', sans-serif);
+  }
+  .pfm-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+  .pfm-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  .pfm-close {
+    background: transparent;
+    border: 0;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .pfm-success {
+    font-size: 1.1rem;
+    color: green;
+    font-weight: 600;
+  }
+
+  .pfm-dialog form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    grid-auto-rows: min-content;
+  }
+  @media screen and (min-width: 750px) {
+    .pfm-dialog form {
+      grid-template-columns: 1fr 1fr;
+    }
+    .pfm-dialog form select,
+    .pfm-dialog form textarea,
+    .pfm-dialog form .pfm-terms,
+    .pfm-dialog form .pfm-submit,
+    .pfm-dialog form p {
+      grid-column: span 2;
+    }
+  }
+
+  .pfm-dialog input,
+  .pfm-dialog select,
+  .pfm-dialog textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #f7f7f7;
+    font-size: 14px;
+  }
+  .pfm-dialog input::placeholder,
+  .pfm-dialog textarea::placeholder {
+    color: #888;
+  }
+  .pfm-dialog textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  .pfm-subtitle {
+    font-size: 14px;
+    color: #333;
+    margin: 0 0 1rem;
+  }
+
+  .pfm-terms {
+    grid-column: 1 / -1;
+  }
+  .pfm-terms label {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: flex-start;
+    gap: 8px;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.45;
+    color: #333;
+  }
+  .pfm-terms input[type="checkbox"] {
+    align-self: start;
+    margin: 2px 0 0 0;
+    flex: 0 0 auto;
+  }
+  .pfm-terms span {
+    white-space: normal;
+    word-break: break-word;
+  }
+  .pfm-terms a {
+    color: #000;
+    text-decoration: underline;
+  }
+
+  .pfm-submit {
+    background: #000;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  @supports (-webkit-touch-callout:none){
+    .pfm-terms { 
+      padding-bottom: 10px;
+      align-self: start;
+      margin: 2px 6px 0 0;
+      flex: 0 0 auto;
+    }
+    
+  }
+  .pfm-terms input[type="checkbox"] {
+
+  }
+
+</style>
+
+<script>
+  (function () {
+    const overlay = document.getElementById('professional-form-modal');
+    if (!overlay) return;
+
+    function openModal() {
+      overlay.setAttribute('aria-hidden', 'false');
+    }
+    function closeModal() {
+      overlay.setAttribute('aria-hidden', 'true');
+    }
+
+    window.__pfmOpenForm = openModal;
+
+    document.addEventListener('click', (e) => {
+      const trigger = e.target.closest('[data-open="professional-form"]');
+      if (trigger) {
+        e.preventDefault();
+        openModal();
+      }
+    });
+
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) closeModal();
+    });
+    overlay.querySelector('.pfm-close')?.addEventListener('click', closeModal);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Formulario Profesional",
+  "settings": []
+}
+{% endschema %}
