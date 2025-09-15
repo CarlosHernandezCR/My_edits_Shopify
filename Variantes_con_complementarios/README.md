@@ -1,0 +1,1 @@
+Componente que usará los productos complementarios que se asignen a un producto como si fueran variantes, se mostrará el producto propio con un borde como "seleccionado" y luego el resto de productos que se habrán asignado en productos complementarios, además se podrá modificar el tamaño de las imágenes.
